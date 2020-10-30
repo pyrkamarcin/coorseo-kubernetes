@@ -27,7 +27,7 @@ spec:
             - name: SESSION_COOKIE_NAME
               value: my_cookie
             - name: SQLALCHEMY_DATABASE_URI
-              value: postgresql+psycopg2://user:password@postgresql:5432/coorseo
+              value: postgresql+psycopg2://postgres:password@postgresql:5432/coorseo
           ports:
             - containerPort: 5000
           resources:
