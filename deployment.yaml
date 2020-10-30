@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      name: application
+  template:
+    metadata:
+      name: application
+      labels:
+        name: application
+    spec:
+      containers:
+        - name: application
+          image: docker.io/jetalone/coorseo-api:latest
+          env:
+            - name: SECRET_KEY
+              value: HxGIR23yK41si8zd9t9kKTEzQu5IyWetsGzrKtPCe294P4ACyselq4McFarahci
+            - name: SESSION_COOKIE_NAME
+              value: my_cookie
+            - name: SQLALCHEMY_DATABASE_URI
+              value: postgresql+psycopg2://user:password@db:5432/coorseo
+          ports:
+            - containerPort: 5000
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"
+            requests:
+              memory: "256Mi"
+              cpu: "1000m"
