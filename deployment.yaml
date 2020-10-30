@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: application-deployment
 spec:
-  replicas: 1
+  replicas: 5
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -18,6 +18,20 @@ spec:
       labels:
         name: application
     spec:
+      initContainers:
+        - name: migrations
+          image: docker.io/jetalone/coorseo-api:latest
+          command: ["python3.8", "migration.py", "db", "upgrade"]
+          env:
+            - name: SQLALCHEMY_DATABASE_URI
+              value: postgresql+psycopg2://postgres:password@postgresql:5432/coorseo
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "1000m"
+            requests:
+              memory: "256Mi"
+              cpu: "1000m"
       containers:
         - name: application
           image: docker.io/jetalone/coorseo-api:latest
